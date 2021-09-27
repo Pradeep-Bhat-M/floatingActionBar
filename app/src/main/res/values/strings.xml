@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<resources>
+    <string name="app_name">Global Action Bar Service</string>
+    <string name="power">Power</string>
+    <string name="volume">Vol +</string>
+    <string name="scroll">Scroll</string>
+    <string name="swipe">Swipe</string>
+    <string name="description1">Enable screen reading for language translation?</string>
+    <string name="yes">Yes</string>
+    <string name="no">NO</string>
+    <string name="description2">Disable screen reading for language translation?</string>
+</resources>
