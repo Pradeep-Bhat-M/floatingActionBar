@@ -4,6 +4,7 @@ import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.SuppressLint;
 import android.graphics.PixelFormat;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -17,6 +18,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.RequiresApi;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.List;
 
 public class GlobalActionBarService extends AccessibilityService {
 
@@ -46,6 +57,7 @@ public class GlobalActionBarService extends AccessibilityService {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onServiceConnected() {
@@ -157,20 +169,31 @@ public class GlobalActionBarService extends AccessibilityService {
         AccessibilityNodeInfo currentNode = getRootInActiveWindow();
 
         if(yesClicked){
-            if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_HOVER_ENTER ||
-                event.getEventType() == AccessibilityEvent.TYPE_VIEW_CLICKED ) {
+            if ( event.getEventType() == AccessibilityEvent.TYPE_VIEW_CLICKED ) {
                 System.out.println(event.getText());
             }
         }
 
-        System.out.println(AccessibilityNodeInfo.ACTION_LONG_CLICK);
-
     }
 
-    public String translate(String message){
+    public String translate(String text, String langTo, String langFrom) throws IOException {
 
-        String translatedMessage = "";
-        return translatedMessage;
+        // INSERT YOU URL HERE
+        String urlStr = "https://script.google.com/macros/s/AKfycbwZksBZVaxpxvwnG0cBNJhQbI__j64yRr76BTxWsQUCTc-yNH1ipMzpjplai_-7iwNR/exec" +
+                "?q=" + URLEncoder.encode(text, "UTF-8") +
+                "&target=" + langTo +
+                "&source=" + langFrom;
+        URL url = new URL(urlStr);
+        StringBuilder response = new StringBuilder();
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+        return response.toString();
     }
 
 
