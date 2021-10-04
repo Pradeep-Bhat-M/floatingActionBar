@@ -194,14 +194,16 @@ public class GlobalActionBarService extends AccessibilityService {
     public void onAccessibilityEvent(AccessibilityEvent event) {
         AccessibilityNodeInfo currentNode = getRootInActiveWindow();
 
-        if(!event.getClassName().toString().contains("RelativeLayout")) {
-            if (yesClicked) {
+//        if(!event.event.getClassName().toString().contains("ViewGroup")getClassName().toString().contains("RelativeLayout") || !event.getClassName().toString().contains("ImageView")) {
+        if(yesClicked){
+            if ( event.getClassName().toString().contains("ViewGroup") || event.getClassName().toString().contains("TextView")) {
                 if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_CLICKED) {
                     StringBuilder res = new StringBuilder();
                     for (CharSequence i : event.getText()) {
                         res.append(i);
                         res.append('\n');
                     }
+
                     System.out.println(res.toString());
                     String rawText = res.toString();
                     if (rawText != null) {
@@ -213,6 +215,7 @@ public class GlobalActionBarService extends AccessibilityService {
                     System.out.println(event.getClassName().toString());
                 }
             }
+            System.out.println("\n\n "+event.getClassName().toString()+"\n\n");
         }
     }
 
