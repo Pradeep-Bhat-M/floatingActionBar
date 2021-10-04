@@ -3,8 +3,12 @@ package com.example.android.globalactionbarservice;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.graphics.PixelFormat;
+import android.graphics.Rect;
 import android.os.Build;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -13,13 +17,20 @@ import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
+
+import com.google.android.material.snackbar.Snackbar;
+
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -39,7 +50,10 @@ public class GlobalActionBarService extends AccessibilityService {
     ImageView widgetCloseIcon;
     Button yesButton;
     Button noButton;
+    Button closeButton;
     TextView description;
+    TextView translatedTextView;
+
 
     boolean expanded = false;
     boolean yesClicked = false;
@@ -83,7 +97,8 @@ public class GlobalActionBarService extends AccessibilityService {
         yesButton = mLayout.findViewById(R.id.yesButton);
         noButton = mLayout.findViewById(R.id.noButton);
         description = mLayout.findViewById(R.id.description);
-
+        translatedTextView = mLayout.findViewById(R.id.translatedTextView);
+        closeButton = mLayout.findViewById(R.id.closeButton);
 
         mainLayout.setOnTouchListener(new View.OnTouchListener() {
             int X_Axis, Y_Axis;
@@ -129,6 +144,15 @@ public class GlobalActionBarService extends AccessibilityService {
             }
         });
 
+       closeButton.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               expandedLayout.setVisibility(View.GONE);
+               collapsedLayout.setVisibility(View.VISIBLE);
+               translatedTextView.setText("");
+           }
+       });
+
         yesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,6 +172,7 @@ public class GlobalActionBarService extends AccessibilityService {
             public void onClick(View v) {
                 expandedLayout.setVisibility(View.GONE);
                 collapsedLayout.setVisibility(View.VISIBLE);
+                translatedTextView.setText("");
                 expanded = false;
                 yesClicked = false;
                 updateServiceProvidingState();
@@ -164,37 +189,52 @@ public class GlobalActionBarService extends AccessibilityService {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         AccessibilityNodeInfo currentNode = getRootInActiveWindow();
 
-        if(yesClicked){
-            if ( event.getEventType() == AccessibilityEvent.TYPE_VIEW_CLICKED ) {
-                System.out.println(event.getText());
+        if(!event.getClassName().toString().contains("RelativeLayout")) {
+            if (yesClicked) {
+                if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_CLICKED) {
+                    StringBuilder res = new StringBuilder();
+                    for (CharSequence i : event.getText()) {
+                        res.append(i);
+                        res.append('\n');
+                    }
+                    System.out.println(res.toString());
+                    String rawText = res.toString();
+                    if (rawText != null) {
+                        translatedTextView.setText(res.toString());
+                        expandedLayout.setVisibility(View.VISIBLE);
+                        collapsedLayout.setVisibility(View.GONE);
+                        expanded = true;
+                    }
+                    System.out.println(event.getClassName().toString());
+                }
             }
         }
-
     }
 
-    public String translate(String text, String langTo, String langFrom) throws IOException {
 
-        // INSERT YOU URL HERE
-        String urlStr = "https://script.google.com/macros/s/AKfycbwZksBZVaxpxvwnG0cBNJhQbI__j64yRr76BTxWsQUCTc-yNH1ipMzpjplai_-7iwNR/exec" +
-                "?q=" + URLEncoder.encode(text, "UTF-8") +
-                "&target=" + langTo +
-                "&source=" + langFrom;
-        URL url = new URL(urlStr);
-        StringBuilder response = new StringBuilder();
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
-        return response.toString();
-    }
+
+//    public String translate(String text, String langTo, String langFrom) throws IOException {
+//        String urlStr = "https://script.google.com/macros/s/AKfycbwZksBZVaxpxvwnG0cBNJhQbI__j64yRr76BTxWsQUCTc-yNH1ipMzpjplai_-7iwNR/exec" +
+//                "?q=" + URLEncoder.encode(text, "UTF-8") +
+//                "&target=" + langTo +
+//                "&source=" + langFrom;
+//        URL url = new URL(urlStr);
+//        StringBuilder response = new StringBuilder();
+//        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+//        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+//        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+//        String inputLine;
+//        while ((inputLine = in.readLine()) != null) {
+//            response.append(inputLine);
+//        }
+//        in.close();
+//        return response.toString();
+//    }
 
 
     @Override

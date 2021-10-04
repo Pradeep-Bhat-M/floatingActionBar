@@ -8,13 +8,13 @@
 
     <RelativeLayout
         android:id="@+id/MainParentRelativeLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <!-- This layout is the Collapsed layout -->
         <RelativeLayout
             android:id="@+id/Layout_Collapsed"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="visible">
@@ -30,12 +30,11 @@
                 android:id="@+id/Widget_Close_Icon"
                 android:layout_width="23dp"
                 android:layout_height="23dp"
-                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
                 android:src="@drawable/close_icon" />
         </RelativeLayout>
 
         <!-- This layout is expended layout-->
-
         <LinearLayout
             android:id="@+id/Layout_Expended"
             android:orientation="horizontal"
@@ -44,47 +43,67 @@
             android:visibility="gone"
             android:layout_toEndOf="@+id/Layout_Collapsed">
             <ImageView
-                android:layout_width="72dp"
-                android:layout_height="60dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:src="@drawable/translate" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_marginLeft="10dp"
                 android:background="#ffffff">
-                    <TextView
-                        android:id="@+id/description"
+
+                <TextView
+                    android:id="@+id/translatedTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#00008b"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="10dp"/>
+                <TextView
+                    android:id="@+id/description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#494F55"
+                    android:textSize="15sp"
+                    android:text="@string/description1"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/yesButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#494F55"
-                        android:textSize="18sp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="@string/description1"
-                        />
-                    <LinearLayout
+                        android:text="@string/yes"
+                        android:textColor="#ffffff"
+                        android:background="#7a86fd"
+                        android:layout_margin="5dp"/>
+                    <Button
+                        android:id="@+id/noButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <Button
-                            android:id="@+id/yesButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/yes"
-                            android:textColor="#ffffff"
-                            android:background="#7a86fd"
-                            android:layout_margin="5dp"/>
-                        <Button
-                            android:id="@+id/noButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/no"
-                            android:textColor="#ffffff"
-                            android:background="#7a86fd"
-                            android:layout_margin="5dp"/>
-                    </LinearLayout>
+                        android:text="@string/no"
+                        android:textColor="#ffffff"
+                        android:background="#7a86fd"
+                        android:layout_margin="5dp"/>
+
+                    <Button
+                        android:id="@+id/closeButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Close"
+                        android:textColor="#ffffff"
+                        android:background="#7a86fd"
+                        android:layout_margin="5dp"/>
+
                 </LinearLayout>
+            </LinearLayout>
+
 
             </LinearLayout>
 

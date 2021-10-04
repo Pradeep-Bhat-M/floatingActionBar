@@ -7,7 +7,7 @@
     android:canPerformGestures="true"
     android:accessibilityEventTypes="typeAllMask"
     android:canRequestEnhancedWebAccessibility="true"
-    android:notificationTimeout="100"
+    android:notificationTimeout="10000"
     android:packageNames="@null"
     android:canRetrieveWindowContent="true"
     android:canRequestTouchExplorationMode="true"/>
