@@ -28,17 +28,6 @@ import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 
-import com.google.android.material.snackbar.Snackbar;
-
-import org.w3c.dom.Text;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.List;
 
 public class GlobalActionBarService extends AccessibilityService {
 
