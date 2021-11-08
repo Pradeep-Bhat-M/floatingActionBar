@@ -28,6 +28,8 @@ import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 
+import java.util.Locale;
+
 
 public class GlobalActionBarService extends AccessibilityService {
 
@@ -193,7 +195,7 @@ public class GlobalActionBarService extends AccessibilityService {
                         res.append('\n');
                     }
 
-                    System.out.println(res.toString());
+//                    System.out.println(res.toString());
                     String rawText = res.toString();
                     if (rawText != null) {
                         translatedTextView.setText(res.toString());
@@ -201,10 +203,11 @@ public class GlobalActionBarService extends AccessibilityService {
                         collapsedLayout.setVisibility(View.GONE);
                         expanded = true;
                     }
-                    System.out.println(event.getClassName().toString());
+//                    System.out.println(event.getClassName().toString());
+                    System.out.println(Locale.getDefault().getDisplayLanguage());
                 }
             }
-            System.out.println("\n\n "+event.getClassName().toString()+"\n\n");
+//            System.out.println("\n\n "+event.getClassName().toString()+"\n\n");
         }
     }
 
