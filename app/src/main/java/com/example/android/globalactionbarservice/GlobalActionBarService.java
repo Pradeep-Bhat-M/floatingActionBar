@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
@@ -28,6 +29,12 @@ import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Locale;
 
 
@@ -198,10 +205,18 @@ public class GlobalActionBarService extends AccessibilityService {
 //                    System.out.println(res.toString());
                     String rawText = res.toString();
                     if (rawText != null) {
+
                         translatedTextView.setText(res.toString());
                         expandedLayout.setVisibility(View.VISIBLE);
                         collapsedLayout.setVisibility(View.GONE);
                         expanded = true;
+                        try {
+                            String translated = translate(rawText.toString(), "en", "kn");
+                            System.out.println(translated.toString());
+                            translatedTextView.setText(translated.toString());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
 //                    System.out.println(event.getClassName().toString());
                     System.out.println(Locale.getDefault().getDisplayLanguage());
@@ -213,23 +228,23 @@ public class GlobalActionBarService extends AccessibilityService {
 
 
 
-//    public String translate(String text, String langTo, String langFrom) throws IOException {
-//        String urlStr = "https://script.google.com/macros/s/AKfycbwZksBZVaxpxvwnG0cBNJhQbI__j64yRr76BTxWsQUCTc-yNH1ipMzpjplai_-7iwNR/exec" +
-//                "?q=" + URLEncoder.encode(text, "UTF-8") +
-//                "&target=" + langTo +
-//                "&source=" + langFrom;
-//        URL url = new URL(urlStr);
-//        StringBuilder response = new StringBuilder();
-//        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-//        con.setRequestProperty("User-Agent", "Mozilla/5.0");
-//        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-//        String inputLine;
-//        while ((inputLine = in.readLine()) != null) {
-//            response.append(inputLine);
-//        }
-//        in.close();
-//        return response.toString();
-//    }
+    public String translate(String text, String langTo, String langFrom) throws IOException {
+        String urlStr = "https://script.google.com/macros/s/AKfycbxGhrb7hDSjY17ysrzt_dFK5ygd-GiHfQd4Xxd20bewVYoYMfWrmYx4N4841EmsKuTX/exec" +
+                "?q=" + URLEncoder.encode(text, "UTF-8") +
+                "&target=" + langTo +
+                "&source=" + langFrom;
+        URL url = new URL(urlStr);
+        StringBuilder response = new StringBuilder();
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+        return response.toString();
+    }
 
 
     @Override
@@ -237,3 +252,33 @@ public class GlobalActionBarService extends AccessibilityService {
 
     }
 }
+//class RetrieveFeedTask extends AsyncTask<String, Void, RSSFeed> {
+//
+//    private Exception exception;
+//
+//    protected RSSFeed doInBackground(String... urls) {
+//        try {
+//            URL url = new URL(urls[0]);
+//            SAXParserFactory factory = SAXParserFactory.newInstance();
+//            SAXParser parser = factory.newSAXParser();
+//            XMLReader xmlreader = parser.getXMLReader();
+//            RssHandler theRSSHandler = new RssHandler();
+//            xmlreader.setContentHandler(theRSSHandler);
+//            InputSource is = new InputSource(url.openStream());
+//            xmlreader.parse(is);
+//
+//            return theRSSHandler.getFeed();
+//        } catch (Exception e) {
+//            this.exception = e;
+//
+//            return null;
+//        } finally {
+//            is.close();
+//        }
+//    }
+//
+//    protected void onPostExecute(RSSFeed feed) {
+//        // TODO: check this.exception
+//        // TODO: do something with the feed
+//    }
+//}
